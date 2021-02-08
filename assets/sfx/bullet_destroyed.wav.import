@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bullet_destroyed.wav-b7a47f6e01d8fbcc3859469504dcb952.sample"
+
+[deps]
+
+source_file="res://assets/sfx/bullet_destroyed.wav"
+dest_files=[ "res://.import/bullet_destroyed.wav-b7a47f6e01d8fbcc3859469504dcb952.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

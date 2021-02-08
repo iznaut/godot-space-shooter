@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/spawners/EnemySpawn.tscn" type="PackedScene" id=2]
+
+[node name="EnemyFormation" type="Node2D"]
+position = Vector2( 0, 8 )
+
+[node name="EnemySpawn1" parent="." instance=ExtResource( 2 )]
+position = Vector2( -16, 48 )
+
+[node name="Position2D" type="Position2D" parent="EnemySpawn1"]
+position = Vector2( 32, -44 )
+
+[node name="EnemySpawn4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 88, 48 )
+
+[node name="Position2D" type="Position2D" parent="EnemySpawn4"]
+position = Vector2( -32, -32 )
+
+[node name="EnemySpawn7" parent="." instance=ExtResource( 2 )]
+position = Vector2( 44, -16 )
+
+[node name="Position2D" type="Position2D" parent="EnemySpawn7"]
+position = Vector2( -8, 48 )

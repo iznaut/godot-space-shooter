@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bullet_wall_hit.wav-975d2438b46c6e7b0236c0871a2fe849.sample"
+
+[deps]
+
+source_file="res://assets/sfx/bullet_wall_hit.wav"
+dest_files=[ "res://.import/bullet_wall_hit.wav-975d2438b46c6e7b0236c0871a2fe849.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

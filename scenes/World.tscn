@@ -1,0 +1,278 @@
+[gd_scene load_steps=18 format=2]
+
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scripts/EnemyManager.gd" type="Script" id=2]
+[ext_resource path="res://assets/sprites/9patch.png" type="Texture" id=3]
+[ext_resource path="res://assets/GravityRegular5.tres" type="DynamicFont" id=4]
+[ext_resource path="res://scripts/HUD.gd" type="Script" id=5]
+[ext_resource path="res://scripts/KillArea.gd" type="Script" id=6]
+[ext_resource path="res://scenes/EnemyFormation1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scripts/ShakeCamera2D.gd" type="Script" id=8]
+[ext_resource path="res://assets/sprites/player_bullet.png" type="Texture" id=9]
+[ext_resource path="res://scenes/EnemyFormation2.tscn" type="PackedScene" id=10]
+[ext_resource path="res://assets/sprites/player_bullet_shadow.png" type="Texture" id=11]
+[ext_resource path="res://scenes/EnemyFormation3.tscn" type="PackedScene" id=12]
+[ext_resource path="res://assets/sfx/combo_lost.wav" type="AudioStream" id=13]
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 1
+emission_sphere_radius = 40.0
+flag_disable_z = true
+gravity = Vector3( 0, 90, 60 )
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 4, 64 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 44, 4 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 31.8237, 8 )
+
+[node name="World" type="Node2D"]
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Stars" type="Particles2D" parent="Background"]
+position = Vector2( 36.1763, 17.2225 )
+amount = 25
+lifetime = 2.0
+preprocess = 1.0
+speed_scale = 0.25
+process_material = SubResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+margin_right = 72.0
+margin_bottom = 128.0
+color = Color( 0, 0, 0, 0.662745 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+current = true
+process_mode = 0
+script = ExtResource( 8 )
+
+[node name="Bounds" type="Node2D" parent="."]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="LeftBounds" type="StaticBody2D" parent="Bounds"]
+position = Vector2( -4, 64 )
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/LeftBounds"]
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true,
+"_editor_description_": ""
+}
+
+[node name="TopBounds" type="StaticBody2D" parent="Bounds"]
+position = Vector2( 36, -4 )
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/TopBounds"]
+position = Vector2( 0.1763, 0 )
+shape = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true,
+"_editor_description_": ""
+}
+
+[node name="RightBounds" type="StaticBody2D" parent="Bounds"]
+position = Vector2( 76, 64 )
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/RightBounds"]
+shape = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Middle" type="Position2D" parent="Bounds"]
+position = Vector2( 36, 64 )
+
+[node name="Bottom" type="Position2D" parent="Bounds"]
+position = Vector2( 36.1763, 120 )
+
+[node name="KillArea" type="Area2D" parent="Bounds"]
+position = Vector2( 36.1763, 120 )
+collision_layer = 0
+collision_mask = 3
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/KillArea"]
+shape = SubResource( 4 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 36, 94 )
+collision_layer = 1
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+pause_mode = 2
+
+[node name="HUD" type="NinePatchRect" parent="CanvasLayer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -36.0
+margin_top = 40.0
+margin_right = 36.0
+margin_bottom = 112.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 48, 48 )
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 1
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="StartLabel" type="Label" parent="CanvasLayer/HUD"]
+margin_left = 4.0
+margin_top = 9.0
+margin_right = 71.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.411765, 0.188235, 0.764706, 1 )
+custom_colors/font_color_shadow = Color( 0.576471, 0.411765, 0.54902, 0.470588 )
+text = "press z
+to start"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="Tween" type="Tween" parent="CanvasLayer/HUD"]
+
+[node name="GameInProgress" type="Control" parent="CanvasLayer/HUD"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/HUD/GameInProgress"]
+margin_left = -8.0
+margin_top = 9.0
+margin_right = 59.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.411765, 0.188235, 0.764706, 1 )
+custom_colors/font_color_shadow = Color( 0.576471, 0.411765, 0.54902, 0.470588 )
+text = "score:
+9999999"
+align = 2
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="CanvasLayer/HUD/GameInProgress/ScoreLabel"]
+position = Vector2( 8, -58 )
+
+[node name="MultiLabel" type="Label" parent="CanvasLayer/HUD/GameInProgress"]
+visible = false
+margin_left = 14.0
+margin_top = -3.0
+margin_right = 59.0
+margin_bottom = 10.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.545098, 0.368627, 0.513726, 1 )
+text = "multi x99"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="BulletDisplay" type="Control" parent="CanvasLayer/HUD/GameInProgress"]
+margin_left = 9.0
+margin_top = 10.0
+margin_right = 25.0
+margin_bottom = 22.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Bullet1" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet1"]
+modulate = Color( 1, 1, 1, 0.470588 )
+position = Vector2( 13, 3 )
+texture = ExtResource( 11 )
+
+[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet1"]
+position = Vector2( 13, 3 )
+texture = ExtResource( 9 )
+
+[node name="Bullet2" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet2"]
+modulate = Color( 1, 1, 1, 0.470588 )
+position = Vector2( 1, 0 )
+texture = ExtResource( 11 )
+
+[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet2"]
+position = Vector2( 1, 0 )
+texture = ExtResource( 9 )
+
+[node name="Bullet3" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
+margin_left = 3.0
+margin_top = 10.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet3"]
+modulate = Color( 1, 1, 1, 0.470588 )
+texture = ExtResource( 11 )
+
+[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet3"]
+texture = ExtResource( 9 )
+
+[node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="CanvasLayer/HUD"]
+stream = ExtResource( 13 )
+
+[node name="EnemyManager" type="Node2D" parent="."]
+script = ExtResource( 2 )
+formations = [ ExtResource( 7 ), ExtResource( 10 ), ExtResource( 12 ) ]
+[connection signal="body_entered" from="Bounds/KillArea" to="Bounds/KillArea" method="_on_Area2D_body_entered"]
