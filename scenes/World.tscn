@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/EnemyManager.gd" type="Script" id=2]
@@ -6,12 +6,10 @@
 [ext_resource path="res://assets/GravityRegular5.tres" type="DynamicFont" id=4]
 [ext_resource path="res://scripts/HUD.gd" type="Script" id=5]
 [ext_resource path="res://scripts/KillArea.gd" type="Script" id=6]
-[ext_resource path="res://scenes/EnemyFormation1.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/EnemyFormations.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scripts/ShakeCamera2D.gd" type="Script" id=8]
 [ext_resource path="res://assets/sprites/player_bullet.png" type="Texture" id=9]
-[ext_resource path="res://scenes/EnemyFormation2.tscn" type="PackedScene" id=10]
 [ext_resource path="res://assets/sprites/player_bullet_shadow.png" type="Texture" id=11]
-[ext_resource path="res://scenes/EnemyFormation3.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/sfx/combo_lost.wav" type="AudioStream" id=13]
 
 [sub_resource type="ParticlesMaterial" id=1]
@@ -114,6 +112,11 @@ shape = SubResource( 4 )
 position = Vector2( 36, 94 )
 collision_layer = 1
 
+[node name="EnemyManager" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="EnemyFormations" parent="EnemyManager" instance=ExtResource( 7 )]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 pause_mode = 2
 
@@ -162,7 +165,6 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="CanvasLayer/HUD"]
 
 [node name="GameInProgress" type="Control" parent="CanvasLayer/HUD"]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
@@ -215,7 +217,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Bullet1" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
+[node name="BulletPip1" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
@@ -223,16 +225,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet1"]
+[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip1"]
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 13, 3 )
 texture = ExtResource( 11 )
 
-[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet1"]
+[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip1"]
 position = Vector2( 13, 3 )
 texture = ExtResource( 9 )
 
-[node name="Bullet2" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
+[node name="BulletPip2" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 40.0
@@ -242,16 +244,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet2"]
+[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip2"]
 modulate = Color( 1, 1, 1, 0.470588 )
 position = Vector2( 1, 0 )
 texture = ExtResource( 11 )
 
-[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet2"]
+[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip2"]
 position = Vector2( 1, 0 )
 texture = ExtResource( 9 )
 
-[node name="Bullet3" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
+[node name="BulletPip3" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
 margin_left = 3.0
 margin_top = 10.0
 margin_right = 40.0
@@ -262,17 +264,13 @@ __meta__ = {
 "_editor_description_": ""
 }
 
-[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet3"]
+[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip3"]
 modulate = Color( 1, 1, 1, 0.470588 )
 texture = ExtResource( 11 )
 
-[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/Bullet3"]
+[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip3"]
 texture = ExtResource( 9 )
 
 [node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="CanvasLayer/HUD"]
 stream = ExtResource( 13 )
-
-[node name="EnemyManager" type="Node2D" parent="."]
-script = ExtResource( 2 )
-formations = [ ExtResource( 7 ), ExtResource( 10 ), ExtResource( 12 ) ]
 [connection signal="body_entered" from="Bounds/KillArea" to="Bounds/KillArea" method="_on_Area2D_body_entered"]

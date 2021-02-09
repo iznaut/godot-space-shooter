@@ -2,9 +2,16 @@ extends KinematicBody2D
 
 export var move_speed = 50
 export var turn_direction = 1
+enum PLAYER_CLASS {DEFAULT, SNIPER}
+export (PLAYER_CLASS) var player_class
 
 var bullet_limit = 3
 var stunned = false
+
+
+func _ready():
+	if player_class == PLAYER_CLASS.SNIPER:
+		move_speed = 30
 
 
 func _physics_process(delta):
@@ -15,6 +22,10 @@ func _physics_process(delta):
 			move_vec.x -= 1
 		if Input.is_action_pressed("move_right"):
 			move_vec.x += 1
+		if Input.is_action_pressed("move_up"):
+			get_class_specific_action("move_up", player_class)
+		if Input.is_action_pressed("move_down"):
+			get_class_specific_action("move_down", player_class)
 
 		if Input.is_action_just_pressed("shoot"):
 			var bullet_count = get_tree().get_nodes_in_group("player_bullets").size()
@@ -23,18 +34,25 @@ func _physics_process(delta):
 				$FiringPoint.rotation = rotation
 				$FiringPoint.shoot(move_vec.x)
 
+
 	if move_vec:
-		$Tween.interpolate_property(
-			self, "rotation", rotation,
-			turn_direction * (move_vec.x / 2), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN
-		)
-		$Tween.start()
+		if player_class == PLAYER_CLASS.SNIPER:
+			pass
+		else:
+			$Tween.interpolate_property(
+				self, "rotation", rotation,
+				turn_direction * (move_vec.x / 2), 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN
+			)
+			$Tween.start()
 	else:
-		$Tween.interpolate_property(
-			self, "rotation", rotation,
-			0, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN
-		)
-		$Tween.start()
+		if player_class == PLAYER_CLASS.SNIPER:
+			pass
+		else:
+			$Tween.interpolate_property(
+				self, "rotation", rotation,
+				0, 0.1, Tween.TRANS_LINEAR, Tween.EASE_IN
+			)
+			$Tween.start()
 
 	var collision = move_and_collide(move_vec * delta * move_speed)
 
@@ -61,3 +79,11 @@ func _on_Enemy_hit(enemy_body):
 	yield(timer, "timeout")
 	get_tree().paused = false
 	pause_mode = Node.PAUSE_MODE_STOP
+
+
+func get_class_specific_action(input, pclass):
+	if pclass == PLAYER_CLASS.SNIPER:
+		if input == "move_up":
+			rotate(0.1)
+		elif input == "move_down":
+			rotate(-0.1)
