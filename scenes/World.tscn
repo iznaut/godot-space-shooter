@@ -165,6 +165,7 @@ __meta__ = {
 [node name="Tween" type="Tween" parent="CanvasLayer/HUD"]
 
 [node name="GameInProgress" type="Control" parent="CanvasLayer/HUD"]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {
