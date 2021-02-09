@@ -19,6 +19,6 @@ jobs:
             BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
             CHANNEL: html
             ITCH_GAME: godot-space-shooter
-            ITCH_USER: izzy neuhaus
+            ITCH_USER: "izzy neuhaus"
             PACKAGE: shooter-html.zip
             VERSION: ${{ steps.download-html.outputs.version }}
