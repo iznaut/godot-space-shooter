@@ -46,7 +46,7 @@ window/stretch/aspect="keep"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "BitmapFontCutterPlus" )
+enabled=PoolStringArray(  )
 
 [gui]
 

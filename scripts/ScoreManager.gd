@@ -4,7 +4,7 @@ var score = 0
 var multiplier = 1
 
 signal score_updated(message)
-signal multi_updated(message)
+signal multi_updated
 
 
 func _ready():

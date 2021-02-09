@@ -9,6 +9,8 @@ onready var score_display = game_display.get_node("ScoreLabel")
 onready var multi_display = game_display.get_node("MultiLabel")
 onready var bullet_display = game_display.get_node("BulletDisplay")
 
+var active_bullet_ids = {}
+
 # var message_queue = []
 
 # func _process(_delta):
@@ -40,6 +42,7 @@ func set_multi_display_text(text = false):
 	# Global.MultiLabel.text = String(ScoreManager.multiplier) + 'x'
 	# Global.MultiLabel.visible = true
 
+
 func _on_game_started():
 	score_display.text = "score:\n0"
 	multi_display.text = "multi x2"
@@ -47,20 +50,12 @@ func _on_game_started():
 	game_display.show()
 	
 
-func update_bullet_pips(new_bullet):
+func update_bullet_pips(bullet_instance_id):
 	var bullet_pips = bullet_display.get_children()
-	var pip_updated = false
-	var index = 0
 
-	if !new_bullet:
-		bullet_pips.invert()
-
-	while !pip_updated:
-		if new_bullet && bullet_pips[index].visible == true:
-			bullet_pips[index].hide()
-			pip_updated = true
-		elif !new_bullet && bullet_pips[index].visible == false:
-			bullet_pips[index].show()
-			pip_updated = true
-		else:
-			index += 1
+	if active_bullet_ids.has(bullet_instance_id):
+		bullet_pips[active_bullet_ids[bullet_instance_id]].show()
+		active_bullet_ids.erase((bullet_instance_id))
+	else:
+		active_bullet_ids[bullet_instance_id] = get_instance_id()
+		
