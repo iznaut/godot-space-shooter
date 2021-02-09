@@ -20,7 +20,7 @@ func start(pos, velocity_x, isPlayer):
 		set_collision_layer_bit(0, 1)
 		sprite = get_node("BlueSprite")
 		add_to_group("player_bullets")
-		emit_signal("bullet_state_changed", get_instance_id())
+		emit_signal("bullet_state_changed", true)
 	else:
 		fire_direction = Vector2.DOWN
 		set_collision_layer_bit(1, 2)
@@ -51,4 +51,4 @@ func _physics_process(delta):
 
 func _exit_tree():
 	if is_in_group("player_bullets"):
-		emit_signal("bullet_state_changed", get_instance_id())
+		emit_signal("bullet_state_changed", false)

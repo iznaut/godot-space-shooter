@@ -19,6 +19,7 @@ func shoot(velocity_x = 0):
 
 	b.sprite.set_visible(true)
 
+	# todo - homing shot for enemy
 	# if get_parent().is_in_group("homing"):
 	# 	var dir = (Global.Player.global_position - global_position).normalized()
 	# 	print(dir)
