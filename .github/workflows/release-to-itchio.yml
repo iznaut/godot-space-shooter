@@ -11,7 +11,7 @@ jobs:
           uses: dsaltares/fetch-gh-release-asset@master
           with:
             version: "latest"
-            file: ./build
+            file: HTML5.zip
             token: "${{ secrets.GH_CREDENTIALS }}"
         - name: deploy to itch.io (HTML5)
           uses: josephbmanley/butler-publish-itchio-action@master
@@ -20,5 +20,5 @@ jobs:
             CHANNEL: html
             ITCH_GAME: godot-space-shooter
             ITCH_USER: iznaut
-            PACKAGE: .
+            PACKAGE: HTML5.zip
             VERSION: ${{ steps.download-html.outputs.version }}
