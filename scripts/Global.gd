@@ -25,7 +25,7 @@ func _ready():
 
 
 func _process(_delta):
-	if Input.is_action_just_pressed("shoot") and !Global.game_over and get_tree().paused:
+	if Input.is_action_just_pressed("primary_action") and !Global.game_over and get_tree().paused:
 		emit_signal("game_started")
 		get_tree().paused = false
 		# $Menu/StartLabel.hide()

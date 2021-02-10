@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/EnemySpawn.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/enemy3.png" type="Texture" id=2]
-[ext_resource path="res://assets/sprites/enemy.png" type="Texture" id=3]
-[ext_resource path="res://assets/sprites/enemy2.png" type="Texture" id=4]
+[ext_resource path="res://assets/sprites/shooter1.png" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/dodger1.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/homer1.png" type="Texture" id=4]
 
 [node name="EnemyFormations" type="Node"]
 

@@ -1,6 +1,7 @@
 extends Node2D
 
 export var fire_rate = 0.3
+export var shot_speed = 50
 
 var fire_time = 0.0
 var Bullet = preload("res://scenes/Bullet.tscn")
@@ -15,7 +16,7 @@ func shoot(velocity_x = 0):
 
 	get_tree().get_root().add_child(b)
 
-	b.start(global_position, velocity_x, get_parent().is_in_group('player'))
+	b.start(global_position, get_parent().rotation, shot_speed, velocity_x, get_parent().is_in_group('player'))
 
 	b.sprite.set_visible(true)
 

@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-const MOVE_SPEED = 50
+var shot_speed = 50
 var fire_direction
 var velocity = Vector2()
 var bounce_count = 3
@@ -13,25 +13,27 @@ func _ready():
 	connect("bullet_state_changed", Global.HUD, "update_bullet_pips")
 
 
-func start(pos, velocity_x, isPlayer):
+func start(pos, rot, speed, velocity_x, isPlayer):
 	if isPlayer:
-		fire_direction = Vector2.UP.rotated(rotation)
+		fire_direction = Vector2.UP.rotated(rot)
 		fire_direction.x += velocity_x
-		set_collision_layer_bit(0, 1)
+		set_collision_layer_bit(0, true)
 		sprite = get_node("BlueSprite")
 		add_to_group("player_bullets")
 		emit_signal("bullet_state_changed", true)
 	else:
 		fire_direction = Vector2.DOWN
-		set_collision_layer_bit(1, 2)
+		set_collision_layer_bit(1, true)
 		sprite = get_node("RedSprite")
+		add_to_group("enemy_bullets")
 
 	position = pos
 	velocity = fire_direction
+	shot_speed = speed
 
 
 func _physics_process(delta):
-	var collision = move_and_collide(velocity * MOVE_SPEED * delta)
+	var collision = move_and_collide(velocity * shot_speed * delta)
 	if collision:
 		velocity = velocity.bounce(collision.normal)
 		bounce_count -= 1

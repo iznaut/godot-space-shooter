@@ -22,5 +22,5 @@ func get_enemy():
 
 func update_editor_texture(value):
 	enemy_type = value
-	texture = enemy_scenes[enemy_type].instance().get_node("Sprite").texture
+	texture = enemy_scenes[enemy_type].instance().get_node("AnimatedSprite").get_sprite_frames().get_frame("default", 0)
 	update()

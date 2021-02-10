@@ -39,6 +39,7 @@ func flyIn(enter_position):
 	)
 
 	$EnterTween.start()
+	hit_cooldown(0.5)
 
 
 func hit(direction):
@@ -48,10 +49,13 @@ func hit(direction):
 	if !falling:
 		$CooldownTimer.stop()
 		falling = true
+		$AnimatedSprite.play("hit")
 
 	rotate(direction.x + hit_count)
 	hit_count += 1
 	velocity -= (direction * gravity) * hit_count
+	var mod = 1 - (hit_count * 0.2)
+	$AnimatedSprite.modulate = Color(mod,mod,mod,1)
 
 	if hit_count >= 3:
 		dead = true
@@ -72,6 +76,8 @@ func hit(direction):
 		$ExitTween.start()
 		yield($ExitTween, "tween_completed")
 		queue_free()
+	else:
+		hit_cooldown(1)
 
 
 func move_along_path(delta, loop):
@@ -90,3 +96,9 @@ func move_along_path(delta, loop):
 			path_dir = -1
 		if t <= 0:
 			path_dir = 1
+
+
+func hit_cooldown(seconds):
+	set_collision_mask_bit(0, false)
+	yield(get_tree().create_timer(seconds), "timeout")
+	set_collision_mask_bit(0, true)

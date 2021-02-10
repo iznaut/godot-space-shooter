@@ -7,7 +7,7 @@ var dir_x = 1
 var dodge_speed = 0.5
 
 onready var this = get_parent()
-onready var sprite_width = this.get_node("Sprite").texture.get_size().x
+onready var sprite_width = this.get_node("AnimatedSprite").get_sprite_frames().get_frame("default", 0).get_size().x
 onready var timer = this.get_node("CooldownTimer")
 onready var ShootAudio = get_parent().get_node("ShootAudio")
 
