@@ -12,13 +12,15 @@ func _ready():
 	connect("multi_updated", Global.HUD, "set_multi_display_text")
 
 
-func add_score(enemy_body):
-	score += enemy_body.score_value * multiplier
+func add_score(value):
+	score += value * multiplier
+
 	emit_signal("score_updated", "Score:\n" + String(score))
 
-	if enemy_body.dead:
-		multiplier += 1
-		emit_signal("multi_updated", "multi x" + String(multiplier))
+
+func add_multiplier():
+	multiplier += 1
+	emit_signal("multi_updated", "multi x" + String(multiplier)) 
 
 
 func reset_multiplier():

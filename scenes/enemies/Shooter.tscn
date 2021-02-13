@@ -4,8 +4,10 @@
 [ext_resource path="res://scenes/spawners/FiringPoint.tscn" type="PackedScene" id=2]
 
 [node name="Shooter" instance=ExtResource( 1 )]
+hit_limit = 2
 
 [node name="CooldownTimer" parent="." index="2"]
+process_mode = 0
 wait_time = 2.0
 
 [node name="FiringPoint" parent="." index="4" instance=ExtResource( 2 )]

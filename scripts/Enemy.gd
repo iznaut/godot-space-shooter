@@ -1,34 +1,39 @@
 extends KinematicBody2D
 class_name Enemy
 
-export (int) var path_move_speed = 1
-export (int) var score_value = 10
-export (int) var gravity = 50
+export (int) var hit_limit = 1
+export (float) var path_move_speed = 2.5
+export (int) var path_dir = 1
 export (float, EASE) var t
 export (Curve) var movement_curve
 
-var falling = false
-var dead = false
+var is_falling = false
+var is_dead = false
 var hit_count = 0
 var velocity = Vector2()
-var path_dir = 1
 var hit_rotate = 40
+var parent_path
 
-signal hit(body)
+var CoinScene = preload("res://scenes/Coin.tscn")
+
+signal enemy_hit(trauma, time)
+signal enemy_destroyed
 
 
 func _ready():
 	connect("tree_exited", Global.EnemyManager, "_on_Enemy_tree_exited")
-	connect("hit", ScoreManager, "add_score")
-	connect("hit", Global.Player, "_on_Enemy_hit")
+	connect("enemy_hit", Global, "shake_screen")
+	connect("enemy_destroyed", ScoreManager, "add_multiplier")
 
 
 func _physics_process(delta):
-	if !falling:
-		# move_along_path(delta, true)
-		pass
+	if !is_falling:
+		if parent_path and not $EnterTween.is_active():
+			if Global.wave_count < 10 and $CooldownTimer.time_left < 0.5:
+				return
+			move_along_path(delta, true)
 	else:
-		velocity.y += gravity * delta
+		velocity.y += Global.gravity * delta
 		velocity = move_and_slide(velocity, Vector2(0, -1))
 
 
@@ -46,23 +51,33 @@ func hit(direction):
 	$HitAudio.pitch_scale = 1 + (0.2 * hit_count)
 	$HitAudio.play()
 
-	if !falling:
+	if !is_falling:
 		$CooldownTimer.stop()
-		falling = true
+		is_falling = true
 		$AnimatedSprite.play("hit")
 
 	rotate(direction.x + hit_count)
 	hit_count += 1
-	velocity -= (direction * gravity) * hit_count
+	velocity -= (direction * Global.gravity) * hit_count
 	var mod = 1 - (hit_count * 0.2)
 	$AnimatedSprite.modulate = Color(mod,mod,mod,1)
 
-	if hit_count >= 3:
-		dead = true
+	var coin = CoinScene.instance()
+	coin.global_position = global_position
+	Global.World.add_child(coin)
+	if Global.rng.randi_range(0, 4) == 0:
+		coin.get_node("AnimationPlayer").play("glow")
+		set_collision_mask_bit(2, true)
+		coin.special = true
 
-	emit_signal("hit", self)
+	if hit_count >= hit_limit:
+		is_dead = true
+		emit_signal("enemy_destroyed")
 
-	if dead:
+	# shake camera on hit
+	emit_signal("enemy_hit", 0.2, 0.1 * hit_count)
+
+	if is_dead:
 		$CollisionShape2D.disabled = true
 		
 		$KillAudio.pitch_scale = 1 + (0.2 * ScoreManager.multiplier)
@@ -84,7 +99,7 @@ func move_along_path(delta, loop):
 	# t += (path_dir * move_speed) * delta
 	t += movement_curve.interpolate_baked(path_move_speed * delta)
 
-	position = get_parent().curve.interpolate_baked(t * get_parent().curve.get_baked_length())
+	position = parent_path.curve.interpolate_baked(t * parent_path.curve.get_baked_length())
 	# 	print(t)
 
 	if loop and t >= 1:

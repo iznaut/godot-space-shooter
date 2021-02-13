@@ -21,7 +21,7 @@ animations = [ {
 [node name="Homer" groups=[
 "homing",
 ] instance=ExtResource( 2 )]
-score_value = 20
+hit_limit = 3
 
 [node name="AnimatedSprite" parent="." index="0"]
 frames = SubResource( 1 )

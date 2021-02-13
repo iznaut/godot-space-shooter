@@ -65,24 +65,19 @@ func _physics_process(delta):
 	var collision = move_and_collide(move_vec * delta * move_speed)
 
 	if collision:
-		if collision.collider is KinematicBody2D:
-			hit()
+		var body = collision.collider
+
+		if body is Global.Enemy:
+			stun()
+		elif body is Global.Bullet:
+			get_tree().paused = true
+			Global.game_over = true
 
 
-func hit():
+func stun():
 	stunned = true
 	$StunCooldown.wait_time = 0.4
 	$StunCooldown.start()
 	Global.Camera.trauma = 0.4
 	yield($StunCooldown, "timeout")
 	stunned = false
-
-
-func _on_Enemy_hit(enemy_body):
-	Global.Camera.trauma = 0.2
-	var timer = get_tree().create_timer(0.1 * enemy_body.hit_count)
-	pause_mode = Node.PAUSE_MODE_PROCESS
-	get_tree().paused = true
-	yield(timer, "timeout")
-	get_tree().paused = false
-	pause_mode = Node.PAUSE_MODE_STOP

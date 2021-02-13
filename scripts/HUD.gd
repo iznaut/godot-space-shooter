@@ -1,8 +1,5 @@
 extends Control
 
-export (AudioStreamSample) var confirm_start_sfx
-export (AudioStreamSample) var pause_sfx
-
 export var sfx_enabled = true
 
 onready var start_label = $StartLabel
@@ -10,6 +7,8 @@ onready var game_display = $GameInProgress
 onready var score_display = game_display.get_node("ScoreLabel")
 onready var multi_display = game_display.get_node("MultiLabel")
 onready var bullet_display = game_display.get_node("BulletDisplay")
+
+var score_up_label = preload("res://scenes/ScoreUpLabel.tscn")
 
 
 func _ready():
@@ -61,3 +60,7 @@ func update_bullet_pips(new_bullet):
 			index += 1
 		else:
 			return
+
+
+func _on_wave_complete():
+	$WaveLabel.text = "wave " + String("%02d" % Global.wave_count)

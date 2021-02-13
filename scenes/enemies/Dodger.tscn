@@ -6,7 +6,7 @@
 [ext_resource path="res://assets/sfx/dodge.wav" type="AudioStream" id=4]
 [ext_resource path="res://assets/sprites/dodger2.png" type="Texture" id=5]
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="SpriteFrames" id=1]
 animations = [ {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
@@ -23,13 +23,13 @@ animations = [ {
 extents = Vector2( 7, 7 )
 
 [node name="Dodger" instance=ExtResource( 2 )]
-score_value = 30
 
 [node name="AnimatedSprite" parent="." index="0"]
-frames = SubResource( 3 )
+frames = SubResource( 1 )
 
 [node name="CooldownTimer" parent="." index="2"]
 process_mode = 0
+wait_time = 2.0
 autostart = false
 
 [node name="DodgeTween" type="Tween" parent="." index="5"]

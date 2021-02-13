@@ -10,7 +10,7 @@
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 1.78637, 0.0, 0, 0 ]
 
-[sub_resource type="SpriteFrames" id=3]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
 "frames": [ ExtResource( 6 ) ],
 "loop": true,
@@ -23,7 +23,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="CircleShape2D" id=3]
 radius = 4.0
 
 [node name="KinematicBody2D" type="KinematicBody2D" groups=[
@@ -35,10 +35,10 @@ script = ExtResource( 2 )
 movement_curve = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-frames = SubResource( 3 )
+frames = SubResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
 [node name="CooldownTimer" type="Timer" parent="."]
 autostart = true

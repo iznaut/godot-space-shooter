@@ -1,10 +1,13 @@
 extends Node2D
 
+signal prepared_to_shoot
+signal shot_completed
+
 export var fire_rate = 0.3
 export var shot_speed = 50
 
 var fire_time = 0.0
-var Bullet = preload("res://scenes/Bullet.tscn")
+var BulletScene = preload("res://scenes/Bullet.tscn")
 onready var ShootAudio = get_parent().get_node("ShootAudio")
 
 
@@ -12,7 +15,7 @@ func shoot(velocity_x = 0):
 	if get_time() - fire_time < fire_rate:
 		return
 	fire_time = get_time()
-	var b = Bullet.instance()
+	var b = BulletScene.instance()
 
 	get_tree().get_root().add_child(b)
 
@@ -29,10 +32,13 @@ func shoot(velocity_x = 0):
 
 	ShootAudio.play()
 
+	emit_signal("shot_completed")
+
 
 func get_time():
 	return OS.get_ticks_msec() / 1000.0
 
 
 func _on_CooldownTimer_timeout():
+	emit_signal("prepared_to_shoot")
 	shoot()

@@ -10,6 +10,16 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "KinematicBody2D",
+"class": "Bullet",
+"language": "GDScript",
+"path": "res://scripts/Bullet.gd"
+}, {
+"base": "Area2D",
+"class": "Coin",
+"language": "GDScript",
+"path": "res://scripts/Coin.gd"
+}, {
+"base": "KinematicBody2D",
 "class": "Enemy",
 "language": "GDScript",
 "path": "res://scripts/Enemy.gd"
@@ -20,6 +30,8 @@ _global_script_classes=[ {
 "path": "res://scripts/ShakeCamera2D.gd"
 } ]
 _global_script_class_icons={
+"Bullet": "",
+"Coin": "",
 "Enemy": "",
 "ShakeCamera2D": ""
 }
@@ -46,7 +58,7 @@ window/stretch/aspect="keep"
 
 [gui]
 
-theme/custom_font="res://assets/m3x6.tres"
+theme/custom_font="res://assets/GravityRegular5.tres"
 
 [input]
 
@@ -95,6 +107,9 @@ secondary_action={
 
 2d_physics/layer_1="player"
 2d_physics/layer_2="enemy"
+2d_physics/layer_3="player bullets"
+2d_physics/layer_4="enemy bullets"
+2d_physics/layer_5="pickups"
 
 [rendering]
 

@@ -9,7 +9,7 @@ func _ready():
 
 func _on_Area2D_body_entered(body):
 	# todo would rather use gdscript classes
-	if body.is_in_group("enemy"):
+	if body is Global.Enemy:
 		emit_signal("enemy_dropped")
 
 	body.queue_free()
