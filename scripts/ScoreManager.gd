@@ -3,7 +3,7 @@ extends Node
 var score = 0
 var multiplier = 1
 
-signal score_updated(message)
+signal score_updated(added_score)
 signal multi_updated
 
 
@@ -13,9 +13,10 @@ func _ready():
 
 
 func add_score(value):
-	score += value * multiplier
+	var added_score = value * multiplier
+	score += added_score
 
-	emit_signal("score_updated", "Score:\n" + String(score))
+	emit_signal("score_updated", added_score)
 
 
 func add_multiplier():

@@ -93,7 +93,7 @@ __meta__ = {
 "walls",
 ]]
 position = Vector2( -4, 64 )
-collision_layer = 29
+collision_layer = 0
 collision_mask = 31
 constant_linear_velocity = Vector2( -1, 0 )
 
@@ -108,7 +108,7 @@ __meta__ = {
 "walls",
 ]]
 position = Vector2( 36, -4 )
-collision_layer = 29
+collision_layer = 0
 collision_mask = 31
 constant_linear_velocity = Vector2( 0, 1 )
 
@@ -124,7 +124,7 @@ __meta__ = {
 "walls",
 ]]
 position = Vector2( 76, 64 )
-collision_layer = 29
+collision_layer = 0
 collision_mask = 31
 constant_linear_velocity = Vector2( 1, 0 )
 
@@ -186,6 +186,7 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
 }
+sfx_enabled = false
 
 [node name="WaveLabel" type="Label" parent="CanvasLayer/HUD"]
 modulate = Color( 1, 1, 1, 0.270588 )

@@ -67,7 +67,8 @@ func hit(direction):
 	Global.World.add_child(coin)
 	if Global.rng.randi_range(0, 4) == 0:
 		coin.get_node("AnimationPlayer").play("glow")
-		set_collision_mask_bit(2, true)
+		coin.set_collision_layer_bit(2, true)
+		coin.set_collision_mask_bit(2, true)
 		coin.special = true
 
 	if hit_count >= hit_limit:

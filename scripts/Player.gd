@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal coin_collected(coin)
+
 export var move_speed = 50
 export var turn_direction = 1
 enum PLAYER_CLASS {DEFAULT, SNIPER}
@@ -10,6 +12,8 @@ var stunned = false
 
 
 func _ready():
+	connect("coin_collected", ScoreManager, "add_score")
+
 	if player_class == PLAYER_CLASS.SNIPER:
 		move_speed = 30
 		bullet_limit = 1
@@ -81,3 +85,9 @@ func stun():
 	Global.Camera.trauma = 0.4
 	yield($StunCooldown, "timeout")
 	stunned = false
+
+
+func _on_CoinHitbox_body_entered(body):
+		$CoinHitbox.get_node("CoinCollectAudio").play()
+		emit_signal("coin_collected", body.score_value)
+		body.queue_free()

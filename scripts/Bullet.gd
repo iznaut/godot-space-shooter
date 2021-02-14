@@ -21,7 +21,7 @@ func start(pos, rot, speed, velocity_x, isPlayer):
 		fire_direction = Vector2.UP.rotated(rot)
 		fire_direction.x += velocity_x
 		set_collision_layer_bit(2, true)
-		set_collision_mask_bit(4, true)
+		# set_collision_mask_bit(4, true)
 		set_collision_mask_bit(1, true)
 		sprite = get_node("BlueSprite")
 		add_to_group("player_bullets")

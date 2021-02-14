@@ -10,14 +10,23 @@ onready var bullet_display = game_display.get_node("BulletDisplay")
 
 var score_up_label = preload("res://scenes/ScoreUpLabel.tscn")
 
+var score_queued = 0
+var score_displayed = 0
 
 func _ready():
 	if !sfx_enabled:
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), -99)
 
+func _process(_delta):
+	while score_queued > 0:
+		score_displayed += 1
+		score_display.text = "score: \n" + String("%07d" % score_displayed)
+		score_queued -= 1
+		yield(get_tree().create_timer(0.2), "timeout")
 
-func set_score_display_text(text):
-	score_display.text = text
+
+func set_score_display_text(added_score):
+	score_queued += added_score
 
 
 func set_multi_display_text(text = false):
@@ -35,7 +44,7 @@ func set_multi_display_text(text = false):
 
 
 func _on_game_started():
-	score_display.text = "score:\n0"
+	score_display.text = "score:\n0000000"
 	multi_display.text = "multi x2"
 	start_label.hide()
 	game_display.show()

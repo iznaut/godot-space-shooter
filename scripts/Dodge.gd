@@ -56,5 +56,5 @@ func _on_CooldownTimer_timeout():
 
 
 func _on_TriggerArea_body_entered(body):
-	if !dodged and !this.falling and body.is_in_group("player_bullets"):
+	if !dodged and !this.is_falling and body.is_in_group("player_bullets"):
 		dodge()
