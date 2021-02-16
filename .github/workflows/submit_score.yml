@@ -9,8 +9,8 @@ jobs:
     steps:
     - uses: izneuhaus/itchio-leaderboard-action@v1.0
       with:
-        gist-token: "${{ GH_GIST_TOKEN }}"
-        gist-id: "${{ DB_GIST_ID }}"
+        gist-token: "${{ secrets.GH_GIST_TOKEN }}"
+        gist-id: "${{ secrets.DB_GIST_ID }}"
         gist-filename: "scores.json"
         itch-access-token: ""
         new-best-record: ""
