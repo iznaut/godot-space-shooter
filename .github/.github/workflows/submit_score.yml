@@ -1,0 +1,16 @@
+name: 'submit score to leaderboard'
+
+on:
+  repository_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/itchio-leaderboard-action@v1.0
+      with:
+        gist-token: "${{ GH_GIST_TOKEN }}"
+        gist-id: "${{ DB_GIST_ID }}"
+        gist-filename: "scores.json"
+        itch-access-token: ""
+        new-best-record: ""
