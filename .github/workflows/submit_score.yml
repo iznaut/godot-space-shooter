@@ -7,7 +7,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: izneuhaus/itchio-leaderboard-action@v1.0
+    - uses: izneuhaus/itchio-leaderboard-action@1.0
       with:
         gist-token: "${{ secrets.GH_GIST_TOKEN }}"
         gist-id: "${{ secrets.DB_GIST_ID }}"
