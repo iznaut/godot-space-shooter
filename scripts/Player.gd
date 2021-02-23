@@ -71,11 +71,11 @@ func _physics_process(delta):
 	if collision:
 		var body = collision.collider
 
-		if body is Global.Enemy:
+		if body is Enemy:
 			stun()
-		elif body is Global.Bullet:
+		elif body is Bullet:
 			get_tree().paused = true
-			Global.game_over = true
+			Global.game_state = Global.STATE.OVER
 
 
 func stun():
@@ -88,6 +88,6 @@ func stun():
 
 
 func _on_CoinHitbox_body_entered(body):
-		$CoinHitbox.get_node("CoinCollectAudio").play()
-		emit_signal("coin_collected", body.score_value)
-		body.queue_free()
+	$CoinHitbox.get_node("CoinCollectAudio").play()
+	emit_signal("coin_collected", body.score_value)
+	body.queue_free()

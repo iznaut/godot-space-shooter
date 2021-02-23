@@ -8,8 +8,8 @@ signal multi_updated
 
 
 func _ready():
-	connect("score_updated", Global.HUD, "set_score_display_text")
-	connect("multi_updated", Global.HUD, "set_multi_display_text")
+	connect("score_updated", Global.UI, "set_score_display_text")
+	connect("multi_updated", Global.UI, "set_multi_display_text")
 
 
 func add_score(value):

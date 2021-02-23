@@ -1,34 +1,36 @@
 extends KinematicBody2D
 class_name Bullet
 
+signal bullet_state_changed(this)
+signal player_bullet_hit
+signal player_bullet_missed
+
 var shot_speed = 50
 var fire_direction
 var velocity = Vector2()
 var bounce_count = 3
 var sprite
-
-signal player_bullet_created(bullet)
-signal bullet_state_changed(new_bullet)
+var has_hit = false
 
 
 func _ready():
-	connect("bullet_state_changed", Global.HUD, "update_bullet_pips")
-	connect("player_bullet_created", Global.EnemyManager, "_on_Player_Bullet_Created")
+	connect("bullet_state_changed", Global.UI, "update_bullet_pips")
+	connect("bullet_state_changed", Global.EnemyManager, "_on_Player_Bullet_Created")
+	connect("player_bullet_hit", ScoreManager, "add_multiplier")
+	connect("player_bullet_missed", ScoreManager, "reset_multiplier")
+
+	add_to_group("bullets")
 
 
-func start(pos, rot, speed, velocity_x, isPlayer):
+func start(pos, fire_direction, speed, velocity_x, isPlayer):
 	if isPlayer:
-		fire_direction = Vector2.UP.rotated(rot)
 		fire_direction.x += velocity_x
 		set_collision_layer_bit(2, true)
-		# set_collision_mask_bit(4, true)
 		set_collision_mask_bit(1, true)
 		sprite = get_node("BlueSprite")
 		add_to_group("player_bullets")
-		emit_signal("bullet_state_changed", true)
-		emit_signal("player_bullet_created", self)
+		emit_signal("bullet_state_changed", self)
 	else:
-		fire_direction = Vector2.DOWN
 		set_collision_layer_bit(3, true)
 		set_collision_mask_bit(0, true)
 		sprite = get_node("RedSprite")
@@ -37,6 +39,7 @@ func start(pos, rot, speed, velocity_x, isPlayer):
 	position = pos
 	velocity = fire_direction
 	shot_speed = speed
+	sprite.show()
 
 
 func _physics_process(delta):
@@ -48,6 +51,10 @@ func _physics_process(delta):
 
 		if collision.collider is Enemy:
 			collision.collider.hit(velocity)
+
+		if !collision.collider.is_in_group("walls"):
+			has_hit = true
+			emit_signal("player_bullet_hit")
 		else:
 			$WallHitAudio.play()
 
@@ -55,9 +62,13 @@ func _physics_process(delta):
 			$DestroyedAudio.play()
 			visible = false
 			yield($DestroyedAudio, "finished")
+
+			if !has_hit:
+				emit_signal("player_bullet_missed")
+
 			queue_free()
 
 
 func _exit_tree():
 	if is_in_group("player_bullets"):
-		emit_signal("bullet_state_changed", false)
+		emit_signal("bullet_state_changed", null)

@@ -1,10 +1,10 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/EnemyManager.gd" type="Script" id=2]
 [ext_resource path="res://assets/sprites/9patch.png" type="Texture" id=3]
 [ext_resource path="res://assets/GravityRegular5.tres" type="DynamicFont" id=4]
-[ext_resource path="res://scripts/HUD.gd" type="Script" id=5]
+[ext_resource path="res://scripts/UI.gd" type="Script" id=5]
 [ext_resource path="res://scripts/KillArea.gd" type="Script" id=6]
 [ext_resource path="res://scenes/EnemyFormations.tscn" type="PackedScene" id=7]
 [ext_resource path="res://scripts/ShakeCamera2D.gd" type="Script" id=8]
@@ -20,18 +20,23 @@ gravity = Vector3( 0, 90, 60 )
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 4, 64 )
+[sub_resource type="Animation" id=2]
+length = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.270588 ) ]
+}
 
-[sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 44, 4 )
-
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 31.8237, 8 )
-
-[sub_resource type="Animation" id=5]
-resource_name = "start"
-loop = true
+[sub_resource type="Animation" id=6]
+resource_name = "fade"
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:modulate")
 tracks/0/interp = 1
@@ -42,20 +47,17 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0.270588 ) ]
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
-tracks/1/type = "value"
-tracks/1/path = NodePath(".:rect_position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 0, 1 ),
-"transitions": PoolRealArray( 1, 1 ),
-"update": 0,
-"values": [ Vector2( 16, -64 ), Vector2( 30, -100 ) ]
-}
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 4, 64 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 44, 4 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 31.8237, 8 )
 
 [node name="World" type="Node2D"]
 
@@ -84,9 +86,210 @@ current = true
 process_mode = 0
 script = ExtResource( 8 )
 
+[node name="Player" parent="." instance=ExtResource( 1 )]
+visible = false
+position = Vector2( 36, 94 )
+collision_layer = 1
+collision_mask = 10
+
+[node name="EnemyManager" type="Node2D" parent="."]
+visible = false
+script = ExtResource( 2 )
+
+[node name="Formations" parent="EnemyManager" instance=ExtResource( 7 )]
+
+[node name="UI" type="CanvasLayer" parent="."]
+pause_mode = 2
+script = ExtResource( 5 )
+sfx_enabled = false
+
+[node name="WaveLabel" type="Label" parent="UI"]
+margin_left = 17.0
+margin_top = 48.0
+margin_right = 57.0
+margin_bottom = 55.0
+custom_fonts/font = ExtResource( 4 )
+text = "wave 01"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="Tween" type="Tween" parent="UI/WaveLabel"]
+
+[node name="Start Position" type="Position2D" parent="UI/WaveLabel/Tween"]
+position = Vector2( 17, 48 )
+
+[node name="HUD Position" type="Position2D" parent="UI/WaveLabel/Tween"]
+position = Vector2( 32, 4 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/WaveLabel"]
+anims/fade = SubResource( 2 )
+
+[node name="Menu" type="NinePatchRect" parent="UI"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -36.0
+margin_top = -41.0
+margin_right = 36.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 3 )
+region_rect = Rect2( 0, 0, 48, 48 )
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+axis_stretch_horizontal = 2
+axis_stretch_vertical = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartLabel" type="Label" parent="UI/Menu"]
+margin_left = 4.0
+margin_top = 44.0
+margin_right = 71.0
+margin_bottom = 57.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.411765, 0.188235, 0.764706, 1 )
+custom_colors/font_color_shadow = Color( 0.576471, 0.411765, 0.54902, 0.470588 )
+text = "press z
+to start"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="GameInProgress" type="Control" parent="UI/Menu"]
+modulate = Color( 1, 1, 1, 0 )
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreLabel" type="Label" parent="UI/Menu/GameInProgress"]
+margin_left = -8.0
+margin_top = 9.0
+margin_right = 59.0
+margin_bottom = 22.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.411765, 0.188235, 0.764706, 1 )
+custom_colors/font_color_shadow = Color( 0.576471, 0.411765, 0.54902, 0.470588 )
+text = "score:
+9999999"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="UI/Menu/GameInProgress/ScoreLabel"]
+position = Vector2( 8, -58 )
+
+[node name="MultiLabel" type="Label" parent="UI/Menu/GameInProgress"]
+visible = false
+margin_left = 14.0
+margin_top = -3.0
+margin_right = 59.0
+margin_bottom = 10.0
+custom_fonts/font = ExtResource( 4 )
+custom_colors/font_color = Color( 0.545098, 0.368627, 0.513726, 1 )
+text = "multi x99"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BulletDisplay" type="Control" parent="UI/Menu/GameInProgress"]
+margin_left = 9.0
+margin_top = 10.0
+margin_right = 25.0
+margin_bottom = 22.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BulletPip1" type="Control" parent="UI/Menu/GameInProgress/BulletDisplay"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="player_bullet_shadow" type="Sprite" parent="UI/Menu/GameInProgress/BulletDisplay/BulletPip1"]
+modulate = Color( 1, 1, 1, 0.470588 )
+position = Vector2( 13, 3 )
+texture = ExtResource( 11 )
+
+[node name="player_bullet" type="Sprite" parent="UI/Menu/GameInProgress/BulletDisplay/BulletPip1"]
+position = Vector2( 13, 3 )
+texture = ExtResource( 9 )
+
+[node name="BulletPip2" type="Control" parent="UI/Menu/GameInProgress/BulletDisplay"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="player_bullet_shadow" type="Sprite" parent="UI/Menu/GameInProgress/BulletDisplay/BulletPip2"]
+modulate = Color( 1, 1, 1, 0.470588 )
+position = Vector2( 1, 0 )
+texture = ExtResource( 11 )
+
+[node name="player_bullet" type="Sprite" parent="UI/Menu/GameInProgress/BulletDisplay/BulletPip2"]
+position = Vector2( 1, 0 )
+texture = ExtResource( 9 )
+
+[node name="BulletPip3" type="Control" parent="UI/Menu/GameInProgress/BulletDisplay"]
+margin_left = 3.0
+margin_top = 10.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false,
+"_editor_description_": ""
+}
+
+[node name="player_bullet_shadow" type="Sprite" parent="UI/Menu/GameInProgress/BulletDisplay/BulletPip3"]
+modulate = Color( 1, 1, 1, 0.470588 )
+texture = ExtResource( 11 )
+
+[node name="player_bullet" type="Sprite" parent="UI/Menu/GameInProgress/BulletDisplay/BulletPip3"]
+texture = ExtResource( 9 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Menu/GameInProgress"]
+anims/fade = SubResource( 6 )
+
+[node name="Tween" type="Tween" parent="UI/Menu"]
+
+[node name="Menu Position" type="Position2D" parent="UI/Menu/Tween"]
+visible = false
+position = Vector2( 0, 24 )
+
+[node name="HUD Position" type="Position2D" parent="UI/Menu/Tween"]
+visible = false
+position = Vector2( 0, 104 )
+
+[node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="UI"]
+position = Vector2( 36, 120 )
+stream = ExtResource( 13 )
+
 [node name="Bounds" type="Node2D" parent="."]
 __meta__ = {
-"_edit_lock_": true
+"_edit_group_": true
 }
 
 [node name="LeftBounds" type="StaticBody2D" parent="Bounds" groups=[
@@ -98,9 +301,8 @@ collision_mask = 31
 constant_linear_velocity = Vector2( -1, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/LeftBounds"]
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 __meta__ = {
-"_edit_lock_": true,
 "_editor_description_": ""
 }
 
@@ -114,9 +316,8 @@ constant_linear_velocity = Vector2( 0, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/TopBounds"]
 position = Vector2( 0.1763, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 __meta__ = {
-"_edit_lock_": true,
 "_editor_description_": ""
 }
 
@@ -129,210 +330,17 @@ collision_mask = 31
 constant_linear_velocity = Vector2( 1, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/RightBounds"]
-shape = SubResource( 2 )
-__meta__ = {
-"_edit_lock_": true
-}
+shape = SubResource( 3 )
 
 [node name="Middle" type="Position2D" parent="Bounds"]
 position = Vector2( 36, 64 )
 
-[node name="Bottom" type="Position2D" parent="Bounds"]
-position = Vector2( 36.1763, 120 )
-
 [node name="KillArea" type="Area2D" parent="Bounds"]
-position = Vector2( 36.1763, 120 )
+position = Vector2( 36, 120 )
 collision_layer = 0
 collision_mask = 30
 script = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/KillArea"]
-shape = SubResource( 4 )
-
-[node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 36, 94 )
-collision_layer = 1
-collision_mask = 10
-
-[node name="EnemyManager" type="Node2D" parent="."]
-script = ExtResource( 2 )
-
-[node name="EnemyFormations" parent="EnemyManager" instance=ExtResource( 7 )]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-pause_mode = 2
-
-[node name="HUD" type="NinePatchRect" parent="CanvasLayer"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -36.0
-margin_top = 40.0
-margin_right = 36.0
-margin_bottom = 112.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-texture = ExtResource( 3 )
-region_rect = Rect2( 0, 0, 48, 48 )
-patch_margin_left = 16
-patch_margin_top = 16
-patch_margin_right = 16
-patch_margin_bottom = 16
-axis_stretch_horizontal = 2
-axis_stretch_vertical = 1
-script = ExtResource( 5 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-sfx_enabled = false
-
-[node name="WaveLabel" type="Label" parent="CanvasLayer/HUD"]
-modulate = Color( 1, 1, 1, 0.270588 )
-margin_left = 30.0
-margin_top = -100.0
-margin_right = 70.0
-margin_bottom = -93.0
-custom_fonts/font = ExtResource( 4 )
-text = "wave 01"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": ""
-}
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/HUD/WaveLabel"]
-anims/start = SubResource( 5 )
-
-[node name="StartLabel" type="Label" parent="CanvasLayer/HUD"]
-margin_left = 4.0
-margin_top = 9.0
-margin_right = 71.0
-margin_bottom = 22.0
-custom_fonts/font = ExtResource( 4 )
-custom_colors/font_color = Color( 0.411765, 0.188235, 0.764706, 1 )
-custom_colors/font_color_shadow = Color( 0.576471, 0.411765, 0.54902, 0.470588 )
-text = "press z
-to start"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false,
-"_editor_description_": ""
-}
-
-[node name="Tween" type="Tween" parent="CanvasLayer/HUD"]
-
-[node name="GameInProgress" type="Control" parent="CanvasLayer/HUD"]
-visible = false
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="ScoreLabel" type="Label" parent="CanvasLayer/HUD/GameInProgress"]
-margin_left = -8.0
-margin_top = 9.0
-margin_right = 59.0
-margin_bottom = 22.0
-custom_fonts/font = ExtResource( 4 )
-custom_colors/font_color = Color( 0.411765, 0.188235, 0.764706, 1 )
-custom_colors/font_color_shadow = Color( 0.576471, 0.411765, 0.54902, 0.470588 )
-text = "score:
-9999999"
-align = 2
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="CanvasLayer/HUD/GameInProgress/ScoreLabel"]
-position = Vector2( 8, -58 )
-
-[node name="MultiLabel" type="Label" parent="CanvasLayer/HUD/GameInProgress"]
-visible = false
-margin_left = 14.0
-margin_top = -3.0
-margin_right = 59.0
-margin_bottom = 10.0
-custom_fonts/font = ExtResource( 4 )
-custom_colors/font_color = Color( 0.545098, 0.368627, 0.513726, 1 )
-text = "multi x99"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="BulletDisplay" type="Control" parent="CanvasLayer/HUD/GameInProgress"]
-margin_left = 9.0
-margin_top = 10.0
-margin_right = 25.0
-margin_bottom = 22.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="BulletPip1" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip1"]
-modulate = Color( 1, 1, 1, 0.470588 )
-position = Vector2( 13, 3 )
-texture = ExtResource( 11 )
-
-[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip1"]
-position = Vector2( 13, 3 )
-texture = ExtResource( 9 )
-
-[node name="BulletPip2" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip2"]
-modulate = Color( 1, 1, 1, 0.470588 )
-position = Vector2( 1, 0 )
-texture = ExtResource( 11 )
-
-[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip2"]
-position = Vector2( 1, 0 )
-texture = ExtResource( 9 )
-
-[node name="BulletPip3" type="Control" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay"]
-margin_left = 3.0
-margin_top = 10.0
-margin_right = 40.0
-margin_bottom = 40.0
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false,
-"_editor_description_": ""
-}
-
-[node name="player_bullet_shadow" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip3"]
-modulate = Color( 1, 1, 1, 0.470588 )
-texture = ExtResource( 11 )
-
-[node name="player_bullet" type="Sprite" parent="CanvasLayer/HUD/GameInProgress/BulletDisplay/BulletPip3"]
-texture = ExtResource( 9 )
-
-[node name="ComboLostAudio" type="AudioStreamPlayer2D" parent="CanvasLayer/HUD"]
-stream = ExtResource( 13 )
+shape = SubResource( 5 )
 [connection signal="body_entered" from="Bounds/KillArea" to="Bounds/KillArea" method="_on_Area2D_body_entered"]

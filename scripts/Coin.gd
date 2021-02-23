@@ -1,20 +1,17 @@
 extends RigidBody2D
 class_name Coin
 
+signal coin_juggled(value)
+
 var score_value = 50
 var special = false
-# var velocity = Vector2.ZERO
 
 
-# func _physics_process(delta):
-# 	velocity.y += 1 * delta
-# 	position += velocity
+func _ready():
+	connect("coin_juggled", ScoreManager, "add_score")
 
-# func _process(delta):
-# 	print(get_colliding_bodies())
 
 func _on_body_entered(body):
-	print(body)
 # 	if body.is_in_group("player"):
 # 		emit_signal("coin_collected", score_value)
 # 		$CoinCollectAudio.play()
@@ -29,7 +26,7 @@ func _on_body_entered(body):
 			$CoinHitAudio.play()
 			$AnimationPlayer.playback_speed += 1
 			hit_cooldown(0.5)
-			score_value *= 2
+			emit_signal("coin_juggled", 5)
 		elif body.is_in_group("walls"):
 			linear_velocity = linear_velocity.bounce(body.constant_linear_velocity)
 

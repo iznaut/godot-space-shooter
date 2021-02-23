@@ -1,8 +1,10 @@
 extends Node2D
 
-export (bool) var enabled = true
+enum Difficulty {EASY, MEDIUM, HARD}
+export (Difficulty) var difficulty_level
 
 
-func _ready():
-    if !enabled:
-        queue_free()
+# todo filter formations by difficulty
+# func _ready():
+#     if !enabled:
+#         queue_free()

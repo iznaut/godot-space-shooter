@@ -3,12 +3,14 @@ extends Node2D
 signal prepared_to_shoot
 signal shot_completed
 
+onready var ShootAudio = get_parent().get_node("ShootAudio")
+
 export var fire_rate = 0.3
 export var shot_speed = 50
+export var is_homing = false
 
 var fire_time = 0.0
 var BulletScene = preload("res://scenes/Bullet.tscn")
-onready var ShootAudio = get_parent().get_node("ShootAudio")
 
 
 func shoot(velocity_x = 0):
@@ -19,16 +21,19 @@ func shoot(velocity_x = 0):
 
 	get_tree().get_root().add_child(b)
 
-	b.start(global_position, get_parent().rotation, shot_speed, velocity_x, get_parent().is_in_group('player'))
+	var rot = get_parent().global_rotation
+	var fire_y = 1
 
-	b.sprite.set_visible(true)
+	if is_homing:
+		# var dir = (Global.Player.global_position - global_position).normalized()
+		# rot = acos(dir.x) + PI * -1
+		rot = global_position.angle_to(Global.Player.global_position) + PI / 2
 
-	# todo - homing shot for enemy
-	# if get_parent().is_in_group("homing"):
-	# 	var dir = (Global.Player.global_position - global_position).normalized()
-	# 	print(dir)
-	# 	b.fire_direction = dir
-	# 	b.rotation = dir.angle() + PI / 2.0
+	if global_position.y > Global.middle.y:
+		fire_y = -1
+
+	var fire_direction = Vector2(0, fire_y).rotated(rot)
+	b.start(global_position, fire_direction, shot_speed, velocity_x, get_parent() == Global.Player)
 
 	ShootAudio.play()
 

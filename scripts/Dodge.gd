@@ -37,7 +37,7 @@ func dodge():
 
 
 func check_side():
-	if this.global_position.x >= get_node("/root/World/Bounds/Middle").position.x:
+	if this.global_position.x >= Global.middle.x:
 		dir_x = -1
 	else:
 		dir_x = 1
@@ -56,5 +56,5 @@ func _on_CooldownTimer_timeout():
 
 
 func _on_TriggerArea_body_entered(body):
-	if !dodged and !this.is_falling and body.is_in_group("player_bullets"):
+	if !dodged and body.is_in_group("player_bullets"): # todo this.state == STATE.ALIVE 
 		dodge()

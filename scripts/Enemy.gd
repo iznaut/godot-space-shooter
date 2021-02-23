@@ -7,33 +7,34 @@ export (int) var path_dir = 1
 export (float, EASE) var t
 export (Curve) var movement_curve
 
-var is_falling = false
-var is_dead = false
+enum STATE {ALIVE, FALLING, DEAD}
+var state = STATE.ALIVE
 var hit_count = 0
 var velocity = Vector2()
-var hit_rotate = 40
 var parent_path
 
 var CoinScene = preload("res://scenes/Coin.tscn")
 
 signal enemy_hit(trauma, time)
-signal enemy_destroyed
+# signal enemy_destroyed
 
 
 func _ready():
 	connect("tree_exited", Global.EnemyManager, "_on_Enemy_tree_exited")
 	connect("enemy_hit", Global, "shake_screen")
-	connect("enemy_destroyed", ScoreManager, "add_multiplier")
+	# connect("enemy_destroyed", ScoreManager, "add_multiplier")
+
+	add_to_group("enemies")
 
 
 func _physics_process(delta):
-	if !is_falling:
+	if state == STATE.ALIVE:
 		if parent_path and not $EnterTween.is_active():
-			if Global.wave_count < 10 and $CooldownTimer.time_left < 0.5:
-				return
+			# if Global.wave_count < 10 and $CooldownTimer.time_left < 0.5:
+			# 	return
 			move_along_path(delta, true)
 	else:
-		velocity.y += Global.gravity * delta
+		velocity.y += Global.GRAVITY * delta
 		velocity = move_and_slide(velocity, Vector2(0, -1))
 
 
@@ -51,14 +52,14 @@ func hit(direction):
 	$HitAudio.pitch_scale = 1 + (0.2 * hit_count)
 	$HitAudio.play()
 
-	if !is_falling:
+	if state == STATE.ALIVE:
 		$CooldownTimer.stop()
-		is_falling = true
+		state = STATE.FALLING
 		$AnimatedSprite.play("hit")
 
 	rotate(direction.x + hit_count)
 	hit_count += 1
-	velocity -= (direction * Global.gravity) * hit_count
+	velocity -= (direction * Global.GRAVITY) * hit_count
 	var mod = 1 - (hit_count * 0.2)
 	$AnimatedSprite.modulate = Color(mod,mod,mod,1)
 
@@ -72,13 +73,13 @@ func hit(direction):
 		coin.special = true
 
 	if hit_count >= hit_limit:
-		is_dead = true
-		emit_signal("enemy_destroyed")
+		state = STATE.DEAD
+		# emit_signal("enemy_destroyed")
 
 	# shake camera on hit
 	emit_signal("enemy_hit", 0.2, 0.1 * hit_count)
 
-	if is_dead:
+	if state == STATE.DEAD:
 		$CollisionShape2D.disabled = true
 		
 		$KillAudio.pitch_scale = 1 + (0.2 * ScoreManager.multiplier)

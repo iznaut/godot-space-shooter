@@ -1,9 +1,9 @@
-extends Control
+extends CanvasLayer
 
 export var sfx_enabled = true
 
-onready var start_label = $StartLabel
-onready var game_display = $GameInProgress
+onready var start_label = $Menu.get_node("StartLabel")
+onready var game_display = $Menu.get_node("GameInProgress")
 onready var score_display = game_display.get_node("ScoreLabel")
 onready var multi_display = game_display.get_node("MultiLabel")
 onready var bullet_display = game_display.get_node("BulletDisplay")
@@ -47,7 +47,28 @@ func _on_game_started():
 	score_display.text = "score:\n0000000"
 	multi_display.text = "multi x2"
 	start_label.hide()
-	game_display.show()
+
+
+	var menu_tween = $Menu.get_node("Tween")
+	menu_tween.interpolate_property(
+		$Menu, "rect_position", $Menu.rect_position,
+		menu_tween.get_node("HUD Position").position, 1, Tween.TRANS_QUART, Tween.EASE_OUT
+	)
+	menu_tween.start()
+
+	yield(get_tree().create_timer(0.2), "timeout")
+	Global.Player.show()
+	game_display.get_node("AnimationPlayer").play("fade")
+
+	yield(get_tree().create_timer(0.4), "timeout")
+	
+	var wave_label_tween = $WaveLabel.get_node("Tween")	
+	wave_label_tween.interpolate_property(
+		$WaveLabel, "rect_position", $WaveLabel.rect_position,
+		wave_label_tween.get_node("HUD Position").position, 0.5, Tween.TRANS_EXPO, Tween.EASE_OUT
+	)
+	wave_label_tween.start()
+	$WaveLabel.get_node("AnimationPlayer").play("fade")
 	
 
 func update_bullet_pips(new_bullet):
@@ -71,5 +92,5 @@ func update_bullet_pips(new_bullet):
 			return
 
 
-func _on_wave_complete():
-	$WaveLabel.text = "wave " + String("%02d" % Global.wave_count)
+func _on_EnemyManager_wave_complete(current_wave):
+	$WaveLabel.text = "wave " + String("%02d" % current_wave)

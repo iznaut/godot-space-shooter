@@ -1,28 +1,26 @@
 extends Node2D
 
-signal wave_completed
+signal wave_completed(current_wave)
+
+onready var formations = $Formations
 
 var enemy_container = Node.new()
+var wave_count = 1
 
 
 func _ready():
+	connect("wave_completed", Global, "_on_EnemyManager_wave_complete")
+	connect("wave_completed", Global.UI, "_on_EnemyManager_wave_complete")
+
+	# add container for spawned enemy nodes
 	enemy_container.name = "Enemies"
 	add_child(enemy_container)
 
-	connect("wave_completed", Global, "_on_wave_complete")
-	connect("wave_completed", Global.HUD, "_on_wave_complete")
 
-
-func spawn_formation(index = -1):
-	var formations = $EnemyFormations.get_children()
-
-	if index == -1:
-		index = Global.rng.randi_range(0, formations.size() - 1)
-
-	spawn_enemies(formations[index])
-
-
-func spawn_enemies(formation_node):
+func spawn_formation():
+	var valid_formations = formations.get_child(Global.difficulty_level)
+	var index = Global.rng.randi_range(0, valid_formations.get_child_count() - 1)
+	var formation_node = valid_formations.get_child(index)
 	var form_children = formation_node.get_children()
 	var enemy_spawners = []
 
@@ -43,7 +41,7 @@ func spawn_enemies(formation_node):
 		
 		enemy_container.add_child(enemy)
 		enemy.flyIn(spawner.global_position)
-		yield(enemy.get_node("EnterTween"), "tween_completed")
+		yield(enemy.get_node("EnterTween"), "tween_completed")	
 
 
 func _on_Player_Bullet_Created(bullet):
@@ -52,5 +50,7 @@ func _on_Player_Bullet_Created(bullet):
 
 func _on_Enemy_tree_exited():
 	if enemy_container.get_child_count() <= 0:
-		emit_signal("wave_completed")
+		wave_count += 1
+		emit_signal("wave_completed", wave_count)
+
 		spawn_formation()

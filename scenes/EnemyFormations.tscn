@@ -1,89 +1,175 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://scripts/EnemySpawn.gd" type="Script" id=1]
-[ext_resource path="res://assets/sprites/shooter1.png" type="Texture" id=2]
-[ext_resource path="res://assets/sprites/dodger1.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/shooter1.png" type="Texture" id=1]
+[ext_resource path="res://assets/sprites/dodger1.png" type="Texture" id=2]
+[ext_resource path="res://scripts/EnemySpawn.gd" type="Script" id=3]
 [ext_resource path="res://assets/sprites/homer1.png" type="Texture" id=4]
-[ext_resource path="res://scripts/EnemyFormation.gd" type="Script" id=6]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 12, 36, 0, 0, 0, 0, 12, 12, 0, 0, 0, 0, 60, 36, 0, 0, 0, 0, 60, 12, 0, 0, 0, 0, 12, 36 )
 }
 
-[node name="EnemyFormations" type="Node"]
+[node name="Formations" type="Node"]
 
-[node name="Form1" type="Node2D" parent="."]
+[node name="Easy" type="Node" parent="."]
+
+[node name="VVVVVV" type="Node2D" parent="Easy"]
 visible = false
-script = ExtResource( 6 )
 
-[node name="Spawn1" type="Sprite" parent="Form1"]
+[node name="Spawn1" type="Sprite" parent="Easy/VVVVVV"]
 position = Vector2( 36, 48 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Spawn2" type="Sprite" parent="Form1"]
+[node name="Spawn2" type="Sprite" parent="Easy/VVVVVV"]
 position = Vector2( 52, 24 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Spawn4" type="Sprite" parent="Form1"]
+[node name="Spawn4" type="Sprite" parent="Easy/VVVVVV"]
 position = Vector2( 20, 24 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Form2" type="Node2D" parent="."]
+[node name="Annoying" type="Node2D" parent="Easy"]
 visible = false
-script = ExtResource( 6 )
 
-[node name="Spawn1" type="Sprite" parent="Form2"]
+[node name="Spawn1" type="Sprite" parent="Easy/Annoying"]
 position = Vector2( 24, 48 )
-texture = ExtResource( 3 )
-script = ExtResource( 1 )
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
 enemy_type = 1
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Spawn2" type="Sprite" parent="Form2"]
+[node name="Spawn2" type="Sprite" parent="Easy/Annoying"]
 position = Vector2( 48, 24 )
-texture = ExtResource( 3 )
-script = ExtResource( 1 )
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
 enemy_type = 1
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Form3" type="Node2D" parent="."]
+[node name="Oh Homie" type="Node2D" parent="Easy"]
 visible = false
-script = ExtResource( 6 )
 
-[node name="Spawn1" type="Sprite" parent="Form3"]
+[node name="Spawn1" type="Sprite" parent="Easy/Oh Homie"]
 position = Vector2( 16, 48 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Spawn2" type="Sprite" parent="Form3"]
+[node name="Spawn2" type="Sprite" parent="Easy/Oh Homie"]
 position = Vector2( 56, 48 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Spawn3" type="Sprite" parent="Form3"]
+[node name="Spawn3" type="Sprite" parent="Easy/Oh Homie"]
 position = Vector2( 36, 24 )
 texture = ExtResource( 4 )
-script = ExtResource( 1 )
+script = ExtResource( 3 )
 enemy_type = 2
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
 
-[node name="Form4" type="Node2D" parent="."]
+[node name="Bowtie" type="Node2D" parent="Easy"]
 visible = false
-script = ExtResource( 6 )
 
-[node name="Line2D" type="Path2D" parent="Form4"]
+[node name="Line2D" type="Path2D" parent="Easy/Bowtie"]
 curve = SubResource( 1 )
 
-[node name="Spawn1" type="Sprite" parent="Form4/Line2D"]
+[node name="Spawn1" type="Sprite" parent="Easy/Bowtie/Line2D"]
 position = Vector2( 60, 20.3612 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
 starting_t = 0.594604
 path_dir = -1
+path_move_speed = 2.5
 
-[node name="Spawn2" type="Sprite" parent="Form4/Line2D"]
+[node name="Spawn2" type="Sprite" parent="Easy/Bowtie/Line2D"]
 position = Vector2( 12, 27.3184 )
-texture = ExtResource( 2 )
-script = ExtResource( 1 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
 starting_t = 0.0606288
+path_dir = 1
+path_move_speed = 2.5
+
+[node name="Medium" type="Node" parent="."]
+
+[node name="Shielded" type="Node2D" parent="Medium"]
+visible = false
+
+[node name="Spawn1" type="Sprite" parent="Medium/Shielded"]
+position = Vector2( 12, 12 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
+
+[node name="Spawn2" type="Sprite" parent="Medium/Shielded"]
+position = Vector2( 44, 16 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
+
+[node name="Spawn3" type="Sprite" parent="Medium/Shielded"]
+position = Vector2( 52, 36 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
+
+[node name="Spawn4" type="Sprite" parent="Medium/Shielded"]
+position = Vector2( 20, 32 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5
+
+[node name="Hard" type="Node" parent="."]
+
+[node name="Form1" type="Node2D" parent="Hard"]
+visible = false
+
+[node name="Spawn1" type="Sprite" parent="Hard/Form1"]
+position = Vector2( 36, 48 )
+texture = ExtResource( 1 )
+script = ExtResource( 3 )
+enemy_type = 0
+starting_t = 0.0
+path_dir = 1
+path_move_speed = 2.5

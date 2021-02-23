@@ -12,5 +12,4 @@ wait_time = 2.0
 
 [node name="FiringPoint" parent="." index="4" instance=ExtResource( 2 )]
 position = Vector2( 0, 5 )
-rotation = 1.5708
 [connection signal="timeout" from="CooldownTimer" to="FiringPoint" method="_on_CooldownTimer_timeout"]
