@@ -7,6 +7,7 @@ export var turn_direction = 1
 enum PLAYER_CLASS {DEFAULT, SNIPER}
 export (PLAYER_CLASS) var player_class
 
+
 var bullet_limit = 3
 var stunned = false
 
