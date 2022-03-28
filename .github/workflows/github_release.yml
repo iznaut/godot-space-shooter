@@ -31,5 +31,5 @@ jobs:
           # your game is within a sub-directory
           relative_project_path: .
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_CREDENTIALS }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
