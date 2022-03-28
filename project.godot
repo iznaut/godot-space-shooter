@@ -38,7 +38,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="godot-space-shooter"
+config/name="godot-space-shooterr"
 run/main_scene="res://scenes/World.tscn"
 
 [autoload]
