@@ -14,7 +14,7 @@ jobs:
           with:
             version: "latest"
             file: HTML5.zip
-            token: "${{ secrets.GH_CREDENTIALS }}"
+            token: "${{ secrets.GITHUB_TOKEN }}"
         - name: deploy to itch.io (HTML5)
           uses: josephbmanley/butler-publish-itchio-action@master
           env:
